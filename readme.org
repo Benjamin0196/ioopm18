@@ -1,1 +1,9 @@
 #+title: Content coming soon 
+
+This repo contains material for the 2018 instalment of the course
+[[http://wrigstad.com/ioopm18][IOOPM]]. Before 2018, we used to store lecture slides also in the
+GitHub repo, but starting in 2018, this repo is used only for code
+handouts (and the like).
+
+Thus, if you are a student from a previous instalment, you will
+find this repo a lot less central than in previous years.
