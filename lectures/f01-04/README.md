@@ -1,12 +1,3 @@
-# Föreläsningar under uppstarten (Adams Weckor)
-
-1. [Föreläsning 1](F1.pdf): Grundläggande C-koncept
-2. [Föreläsning 2](../f02/F2.pdf): Struktar och pekare
-3. [Föreläsning 3](../f03/F3.pdf): Dynamisk minneshantering
-
-![Översikt över innehållet](overview.png)
-
-
 # Extramaterial 
 
 Nedan finns länkar till ytterligare material om olika ämnen som är
