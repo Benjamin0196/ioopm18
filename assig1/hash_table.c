@@ -8,12 +8,28 @@ int main(int argc, char *argv[]){
 
 
   ioopm_hash_table_insert(hash_table,0,"FIRSTINSERT");
-  ioopm_hash_table_insert(hash_table,18,"SECONDINSERT");
-  ioopm_hash_table_insert(hash_table,35,"TURDINSERT");
-  ioopm_hash_table_insert(hash_table,69,"FOURTHINSERT");
+  ioopm_hash_table_insert(hash_table,112,"SECONDINSERT");
+  ioopm_hash_table_insert(hash_table,3125,"TURDINSERT");
+  ioopm_hash_table_insert(hash_table,645,"FOURTHINSERT");
+  ioopm_hash_table_insert(hash_table,45,"FIRSTINSERT");
+  ioopm_hash_table_insert(hash_table,1235,"SECONDINSERT");
+  ioopm_hash_table_insert(hash_table,3125,"TURDINSERT");
+  ioopm_hash_table_insert(hash_table,61,"FOURTHINSERT");
+  ioopm_hash_table_insert(hash_table,25,"FIRSTINSERT");
+  ioopm_hash_table_insert(hash_table,135,"SECONDINSERT");
+  ioopm_hash_table_insert(hash_table,3235,"TURDINSERT");
+  ioopm_hash_table_insert(hash_table,646,"FOURTHINSERT");
+  ioopm_hash_table_insert(hash_table,346,"FIRSTINSERT");
+  ioopm_hash_table_insert(hash_table,1235,"SECONDINSERT");
+  ioopm_hash_table_insert(hash_table,353,"TURDINSERT");
+  ioopm_hash_table_insert(hash_table,692,"FOURTHINSERT");
+  ioopm_hash_table_insert(hash_table,46,"FIRSTINSERT");
+  ioopm_hash_table_insert(hash_table,14636,"SECONDINSERT");
+  ioopm_hash_table_insert(hash_table,3366,"TURDINSERT");
+  ioopm_hash_table_insert(hash_table,34643,"FOURTHINSERT");
+  ioopm_hash_table_insert(hash_table,36436,"FIRSTINSERT");
 
-
-
+  ioopm_print_hash_table(hash_table);
   
 
 
@@ -22,19 +38,17 @@ int main(int argc, char *argv[]){
   
   //  printf("RESULT WAS: %s\n", *value_return);
 
-  puts("OG Hash:");
+  //puts("OG Hash:");
   
-  ioopm_print_hash_table(hash_table);
+  //ioopm_print_hash_table(hash_table);
 
   
   puts("New Hash:");
 
-  ioopm_hash_table_remove(hash_table,0);
-  ioopm_hash_table_remove(hash_table,18);
-  ioopm_hash_table_remove(hash_table,35);
-  
-  ioopm_print_hash_table(hash_table);
+  ioopm_hash_table_destroy(hash_table); 
+  //ioopm_print_hash_table(hash_table);
 
+ 
   //    ioopm_print_entry_t(find_previous_entry_for_key(hash_table,129));
   return 0;
 }
@@ -57,7 +71,7 @@ void ioopm_print_entry_t(entry_t *entry){
 
 
 void ioopm_print_hash_table(ioopm_hash_table_t *ht){
-  for (int i = 0 ; i < 2 ; i ++){
+  for (int i = 0 ; i < 17 ; i ++){
     entry_t *current_entry = ht->buckets[i];
     printf("Bucket: %d\n",i);
     while(current_entry->next != NULL){
@@ -134,6 +148,11 @@ char **ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key)
   }  
 }
 
+
+/*
+  WARNING! 
+  Only works for middle entries, untested for first and last entry. -- TODO
+ */
 ioopm_hash_table_t *ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key){
   if (ioopm_hash_table_lookup(ht,key) != NULL){
     entry_t *previous_entry = find_previous_entry_for_key(ht, key);
@@ -148,4 +167,20 @@ ioopm_hash_table_t *ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key){
 
 void entry_destroy(entry_t *entry){
   free(entry);
+}
+
+void ioopm_hash_table_destroy(ioopm_hash_table_t *ht){
+  
+  for (int i = 0 ; i < 17 ; i ++){
+    printf("BUCKET: %d\n",i);
+    entry_t *current_entry = ht->buckets[i];
+    
+    while(current_entry->next != NULL){
+      puts("Entry Destroyed");
+      current_entry = current_entry->next;
+      entry_destroy(current_entry);
+    }
+    current_entry = ht->buckets[i];
+  }
+  
 }
