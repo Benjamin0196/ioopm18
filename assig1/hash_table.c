@@ -65,6 +65,7 @@ static entry_t *find_previous_entry_for_key(ioopm_hash_table_t *ht, int key){
   int bucket = key % 17;
   entry_t *return_entry = ht->buckets[bucket];
   entry_t *current_entry = ht->buckets[bucket];
+
   while(current_entry->key != key){
     return_entry = current_entry;
     current_entry = current_entry->next;
@@ -94,14 +95,24 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value){
       entry->next = entry_create(key, value, next);
     }
 }
-/*
-option_t *ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key){
-  
-  char *value = find_previous_entry_for_key(ht,key)->next->value;
-  bool defined = true;
 
-  option_t *result = {true, "ok"};
-  
-  return result;
+
+option_t *ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key)
+{
+  /// Find the previous entry for key
+  entry_t *tmp = find_previous_entry_for_key(ht->buckets[key % 17], key);
+  entry_t *next = tmp->next;
+
+  if (next && next->key == key)
+    {
+      /// If entry was found, return its value...
+      option_t result = {.defined = true, .value = next-value};
+      return result;
+    }
+  else
+    {
+      /// ... else return NULL
+      option_t result = { .defined = false};
+      return result; /// hmm...
+    }
 }
-*/
