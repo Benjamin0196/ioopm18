@@ -1,56 +1,107 @@
-#include <stdlib.h>
-#include <stdio.h>
+#include "hash_table.h"
 
-/// the types from above
-typedef struct entry entry_t;
-typedef struct hash_table ioopm_hash_table_t;
-ioopm_hash_table_t *ioopm_hash_table_create();
-
-struct entry
-{
-  int key;       // holds the key
-  char *value;   // holds the value
-  entry_t *next; // points to the next entry (possibly NULL)
-};
-
-struct hash_table
-{
-  entry_t *buckets[17];
-};
+int main(int argc, char *argv[]){
+  ioopm_hash_table_t *hash_table = ioopm_hash_table_create();
+  //  hash_table->buckets[0] = entry_create(1,"one",(entry_create(2,"two",(entry_create(3,"three",NULL)))));
+  //hash_table->buckets[1] = entry_create(4,"one",(entry_create(5,"two",(entry_create(6,"three",NULL)))));
+  //hash_table->buckets[3] = entry_create(7,"one",(entry_create(8,"two",(entry_create(9,"three",NULL)))));
 
 
-int main(int argc, char *argv[])
-{
+  ioopm_hash_table_insert(hash_table,0,"FIRSTINSERT");
+  ioopm_hash_table_insert(hash_table,18,"SECONDINSERT");
+  ioopm_hash_table_insert(hash_table,35,"TURDINSERT");
+  ioopm_hash_table_insert(hash_table,69,"FOURTHINSERT");
 
+  //  char *value_return = ioopm_hash_table_lookup(hash_table,69);
+  //printf("RESULT WAS: %s\n", value_return);
+  ioopm_print_hash_table(hash_table);
+  
+  //  ioopm_print_entry_t(find_previous_entry_for_key(hash_table,0));
   return 0;
 }
 
-ioopm_hash_table_t *ioopm_hash_table_create(){
-  ioopm_hash_table_t *result = calloc(1,sizeof(ioopm_hash_table_t));
+static entry_t *entry_create(int key, char *value, entry_t *next){
+
+  entry_t *result = calloc(1,sizeof(entry_t));
+  result->key   = key;
+  result->value = value;
+  result->next  = next;
 
   return result;
 }
 
-entry_t find_entry_for_key(ioopm_hash_table_t*,int,char*);
+void ioopm_print_entry_t(entry_t *entry){
+  int key = entry->key;
+  char *value = entry->value;
+  printf("Key: %d\nValue: %s\n",key,value);
+}
 
-void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value)
-{
-  /// Calculate the bucket for this entry
+
+void ioopm_print_hash_table(ioopm_hash_table_t *ht){
+  for (int i = 0 ; i < 2 ; i ++){
+    entry_t *current_entry = ht->buckets[i];
+    printf("Bucket: %d\n",i);
+    while(current_entry->next != NULL){
+      ioopm_print_entry_t(current_entry);
+      current_entry = current_entry->next;
+    }
+    ioopm_print_entry_t(current_entry);
+  }
+}
+
+
+ioopm_hash_table_t *ioopm_hash_table_create(){
+
+  ioopm_hash_table_t *result = calloc(1,sizeof(ioopm_hash_table_t));
+
+  for (int i = 0 ; i < 17 ; i++){
+    result->buckets[i] = entry_create(0,NULL,NULL);
+  }
+  
+  return result;
+}
+
+static entry_t *find_previous_entry_for_key(ioopm_hash_table_t *ht, int key){  
   int bucket = key % 17;
-  /// Search for an existing entry for a key
-  entry_t *existing_entry = find_entry_for_key(ht->buckets[bucket], key);
+  entry_t *return_entry = ht->buckets[bucket];
+  entry_t *current_entry = ht->buckets[bucket];
+  while(current_entry->key != key){
+    return_entry = current_entry;
+    current_entry = current_entry->next;
+    if(current_entry == NULL){
+      return return_entry;
+    }
+  }
+  return return_entry;
+}
 
-  if (existing_entry != NULL) /// i.e., it exists
+
+
+void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value){
+  /// Calculate the bucket for this entry
+  //int bucket = key % 17;
+  /// Search for an existing entry for a key
+  entry_t *entry = find_previous_entry_for_key(ht, key);
+  entry_t *next = entry->next;
+
+  /// Check if the next entry should be updated or not
+  if (next != NULL && next->key == key)
     {
-      existing_entry->value = value;
+      next->value = value;
     }
   else
-    {
-      /// Get a pointer to the first entry in the bucket
-      entry_t *first_entry = ht->buckets[bucket];
-      /// Create a new entry
-      entry_t *new_entry = entry_create(key, value, first_entry);
-      /// Make the new entry the first entry in the bucket
-      ht->buckets[bucket] = new_entry;
+    {  
+      entry->next = entry_create(key, value, next);
     }
 }
+/*
+option_t *ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key){
+  
+  char *value = find_previous_entry_for_key(ht,key)->next->value;
+  bool defined = true;
+
+  option_t *result = {true, "ok"};
+  
+  return result;
+}
+*/

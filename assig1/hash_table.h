@@ -1,23 +1,45 @@
-#pragma once
 
-/// @brief Create a new hash table
-/// @return A new empty hash table
+#ifndef __HASH_TABLE_H__
+#define __HASH_TABLE_H__
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
+/// the types from above
+typedef struct entry entry_t;
+typedef struct hash_table ioopm_hash_table_t;
+typedef struct option option_t;
+
 ioopm_hash_table_t *ioopm_hash_table_create();
+void ioopm_print_hash_table(ioopm_hash_table_t*);
+void ioopm_print_entry_t(entry_t*);
+void ioopm_hash_table_insert(ioopm_hash_table_t*,int,char*);
+static entry_t *find_previous_entry_for_key(ioopm_hash_table_t*,int);
+static entry_t *entry_create(int,char*,entry_t*);
+option_t *ioopm_hash_table_lookup(ioopm_hash_table_t*,int);
 
-/// @brief add key => value entry in hash table ht
-/// @param ht hash table operated upon
-/// @param key key to insert
-/// @param value value to insert
-void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value);
+struct option{
+  bool defined;
+  char *value;
+};
 
-/// @brief lookup value for key in hash table ht
-/// @param ht hash table operated upon
-/// @param key key to lookup
-/// @return the value mapped to by key (FIXME: incomplete)
-void *ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key);
+struct entry
+{
+  int key;       // holds the key
+  char *value;   // holds the value
+  entry_t *next; // points to the next entry (possibly NULL)
+};
 
-/// @brief remove any mapping from key to a value
-/// @param ht hash table operated upon
-/// @param key key to remove
-/// @return the value mapped to by key (FIXME: incomplete)
-char *ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key);
+struct hash_table
+{
+  entry_t *buckets[17];
+};
+
+
+
+
+
+
+#endif
