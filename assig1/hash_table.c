@@ -137,8 +137,15 @@ char **ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key)
 ioopm_hash_table_t *ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key){
   if (ioopm_hash_table_lookup(ht,key) != NULL){
     entry_t *previous_entry = find_previous_entry_for_key(ht, key);
+    entry_t *temp = previous_entry->next;
     previous_entry->next = previous_entry->next->next;
+    entry_destroy(temp);
     return ht;
   }
   else {return ht;};
+}
+
+
+void entry_destroy(entry_t *entry){
+  free(entry);
 }

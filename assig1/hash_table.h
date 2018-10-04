@@ -20,6 +20,7 @@ static entry_t *find_previous_entry_for_key(ioopm_hash_table_t*,int);
 static entry_t *entry_create(int,char*,entry_t*);
 char **ioopm_hash_table_lookup(ioopm_hash_table_t*,int);
 ioopm_hash_table_t *ioopm_hash_table_remove(ioopm_hash_table_t*, int);
+void entry_destroy(entry_t*);
 
 struct option{
   bool defined;
