@@ -177,10 +177,12 @@ void ioopm_hash_table_destroy(ioopm_hash_table_t *ht){
     
     while(current_entry->next != NULL){
       puts("Entry Destroyed");
-      current_entry = current_entry->next;
       entry_destroy(current_entry);
+      current_entry = current_entry->next;
     }
+    entry_destroy(current_entry);
     current_entry = ht->buckets[i];
   }
-  
+
+  free(ht);
 }
