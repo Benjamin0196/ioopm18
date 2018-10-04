@@ -18,7 +18,8 @@ void ioopm_print_entry_t(entry_t*);
 void ioopm_hash_table_insert(ioopm_hash_table_t*,int,char*);
 static entry_t *find_previous_entry_for_key(ioopm_hash_table_t*,int);
 static entry_t *entry_create(int,char*,entry_t*);
-option_t *ioopm_hash_table_lookup(ioopm_hash_table_t*,int);
+char **ioopm_hash_table_lookup(ioopm_hash_table_t*,int);
+ioopm_hash_table_t *ioopm_hash_table_remove(ioopm_hash_table_t*, int);
 
 struct option{
   bool defined;

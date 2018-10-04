@@ -13,13 +13,28 @@ int main(int argc, char *argv[]){
   ioopm_hash_table_insert(hash_table,69,"FOURTHINSERT");
 
 
+
   
-    char **value_return = ioopm_hash_table_lookup(hash_table,127);
+
+
   
-  printf("RESULT WAS: %s\n", *value_return);
-    
-  // ioopm_print_hash_table(hash_table);
+  //char **value_return = ioopm_hash_table_lookup(hash_table,127);
   
+  //  printf("RESULT WAS: %s\n", *value_return);
+
+  puts("OG Hash:");
+  
+  ioopm_print_hash_table(hash_table);
+
+  
+  puts("New Hash:");
+
+  ioopm_hash_table_remove(hash_table,0);
+  ioopm_hash_table_remove(hash_table,18);
+  ioopm_hash_table_remove(hash_table,35);
+  
+  ioopm_print_hash_table(hash_table);
+
   //    ioopm_print_entry_t(find_previous_entry_for_key(hash_table,129));
   return 0;
 }
@@ -117,4 +132,13 @@ char **ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key)
     char **not_a_valid = &not_valid;
     return not_a_valid;
   }  
+}
+
+ioopm_hash_table_t *ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key){
+  if (ioopm_hash_table_lookup(ht,key) != NULL){
+    entry_t *previous_entry = find_previous_entry_for_key(ht, key);
+    previous_entry->next = previous_entry->next->next;
+    return ht;
+  }
+  else {return ht;};
 }
