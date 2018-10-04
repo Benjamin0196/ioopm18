@@ -12,11 +12,15 @@ int main(int argc, char *argv[]){
   ioopm_hash_table_insert(hash_table,35,"TURDINSERT");
   ioopm_hash_table_insert(hash_table,69,"FOURTHINSERT");
 
-  //  char *value_return = ioopm_hash_table_lookup(hash_table,69);
-  //printf("RESULT WAS: %s\n", value_return);
-  ioopm_print_hash_table(hash_table);
+
   
-  //  ioopm_print_entry_t(find_previous_entry_for_key(hash_table,0));
+    char **value_return = ioopm_hash_table_lookup(hash_table,127);
+  
+  printf("RESULT WAS: %s\n", *value_return);
+    
+  // ioopm_print_hash_table(hash_table);
+  
+  //    ioopm_print_entry_t(find_previous_entry_for_key(hash_table,129));
   return 0;
 }
 
@@ -97,24 +101,20 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value){
 }
 
 
-option_t *ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key)
+char **ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key)
 {
   /// Find the previous entry for key
   entry_t *tmp = find_previous_entry_for_key(ht, key);
   entry_t *next = tmp->next;
+  if(next != NULL){
+    char *value = next->value;
+    char **result = &value;
 
-  if (next && next->key == key)
-    {
-      /// If entry was found, return its value...
-      option_t result = {.defined = true, .value = next->value};
-      option_t *temp = &result;
-      return temp;
-    }
-  else
-    {
-      /// ... else return NULL
-      option_t result = { .defined = false};
-      option_t *temp = &result;
-      return temp; /// hmm...
-    }
+    return result;
+  }
+  else{
+    char *not_valid = NULL;
+    char **not_a_valid = &not_valid;
+    return not_a_valid;
+  }  
 }
