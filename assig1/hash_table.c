@@ -100,19 +100,21 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value){
 option_t *ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key)
 {
   /// Find the previous entry for key
-  entry_t *tmp = find_previous_entry_for_key(ht->buckets[key % 17], key);
+  entry_t *tmp = find_previous_entry_for_key(ht, key);
   entry_t *next = tmp->next;
 
   if (next && next->key == key)
     {
       /// If entry was found, return its value...
-      option_t result = {.defined = true, .value = next-value};
-      return result;
+      option_t result = {.defined = true, .value = next->value};
+      option_t *temp = &result;
+      return temp;
     }
   else
     {
       /// ... else return NULL
       option_t result = { .defined = false};
-      return result; /// hmm...
+      option_t *temp = &result;
+      return temp; /// hmm...
     }
 }
