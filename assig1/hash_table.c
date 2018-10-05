@@ -11,12 +11,13 @@ int main(int argc, char *argv[]){
   //hash_table->buckets[3] = entry_create(7,"one",(entry_create(8,"two",(entry_create(9,"three",NULL)))));
 
   
-  printf("Size of hashtable: %d\n",ioopm_hash_table_size(hash_table));
+  printf("Hashtable empty?: %d\n",ioopm_hash_table_is_empty(hash_table));
   ioopm_hash_table_insert(hash_table,0,"FIRSTINSERT");
   ioopm_hash_table_insert(hash_table,112,"SECONDINSERT");
   ioopm_hash_table_insert(hash_table,3125,"TURDINSERT");
 
-  printf("Size of hashtable: %d\n",ioopm_hash_table_size(hash_table));
+    printf("Hashtable empty?: %d\n",ioopm_hash_table_is_empty(hash_table));
+
   //  ioopm_print_hash_table(hash_table);
   
 
@@ -186,4 +187,13 @@ int ioopm_hash_table_size(ioopm_hash_table_t *ht){
     current_entry = ht->buckets[i];
   }
   return result;
+}
+
+bool ioopm_hash_table_is_empty(ioopm_hash_table_t *ht){
+  for (int i = 0 ; i < No_Buckets ; i++){
+    if(ht->buckets[i]->next != NULL){
+      return false;
+    }
+  }
+  return true;
 }
