@@ -1,4 +1,8 @@
 #include "hash_table.h"
+/* WARNING!
+   Only error when using more than 17 buckets when using hash_table_destroy function. --TODO fix! 
+*/
+#define No_Buckets 17
 
 int main(int argc, char *argv[]){
   ioopm_hash_table_t *hash_table = ioopm_hash_table_create();
@@ -6,30 +10,14 @@ int main(int argc, char *argv[]){
   //hash_table->buckets[1] = entry_create(4,"one",(entry_create(5,"two",(entry_create(6,"three",NULL)))));
   //hash_table->buckets[3] = entry_create(7,"one",(entry_create(8,"two",(entry_create(9,"three",NULL)))));
 
-
+  
+  printf("Size of hashtable: %d\n",ioopm_hash_table_size(hash_table));
   ioopm_hash_table_insert(hash_table,0,"FIRSTINSERT");
   ioopm_hash_table_insert(hash_table,112,"SECONDINSERT");
   ioopm_hash_table_insert(hash_table,3125,"TURDINSERT");
-  ioopm_hash_table_insert(hash_table,645,"FOURTHINSERT");
-  ioopm_hash_table_insert(hash_table,45,"FIRSTINSERT");
-  ioopm_hash_table_insert(hash_table,1235,"SECONDINSERT");
-  ioopm_hash_table_insert(hash_table,3125,"TURDINSERT");
-  ioopm_hash_table_insert(hash_table,61,"FOURTHINSERT");
-  ioopm_hash_table_insert(hash_table,25,"FIRSTINSERT");
-  ioopm_hash_table_insert(hash_table,135,"SECONDINSERT");
-  ioopm_hash_table_insert(hash_table,3235,"TURDINSERT");
-  ioopm_hash_table_insert(hash_table,646,"FOURTHINSERT");
-  ioopm_hash_table_insert(hash_table,346,"FIRSTINSERT");
-  ioopm_hash_table_insert(hash_table,1235,"SECONDINSERT");
-  ioopm_hash_table_insert(hash_table,353,"TURDINSERT");
-  ioopm_hash_table_insert(hash_table,692,"FOURTHINSERT");
-  ioopm_hash_table_insert(hash_table,46,"FIRSTINSERT");
-  ioopm_hash_table_insert(hash_table,14636,"SECONDINSERT");
-  ioopm_hash_table_insert(hash_table,3366,"TURDINSERT");
-  ioopm_hash_table_insert(hash_table,34643,"FOURTHINSERT");
-  ioopm_hash_table_insert(hash_table,36436,"FIRSTINSERT");
 
-  ioopm_print_hash_table(hash_table);
+  printf("Size of hashtable: %d\n",ioopm_hash_table_size(hash_table));
+  //  ioopm_print_hash_table(hash_table);
   
 
 
@@ -43,12 +31,11 @@ int main(int argc, char *argv[]){
   //ioopm_print_hash_table(hash_table);
 
   
-  puts("New Hash:");
+  //puts("New Hash:");
 
-  ioopm_hash_table_destroy(hash_table); 
+  //ioopm_hash_table_destroy(hash_table); 
   //ioopm_print_hash_table(hash_table);
 
- 
   //    ioopm_print_entry_t(find_previous_entry_for_key(hash_table,129));
   return 0;
 }
@@ -71,7 +58,7 @@ void ioopm_print_entry_t(entry_t *entry){
 
 
 void ioopm_print_hash_table(ioopm_hash_table_t *ht){
-  for (int i = 0 ; i < 17 ; i ++){
+  for (int i = 0 ; i < No_Buckets ; i++){
     entry_t *current_entry = ht->buckets[i];
     printf("Bucket: %d\n",i);
     while(current_entry->next != NULL){
@@ -87,7 +74,7 @@ ioopm_hash_table_t *ioopm_hash_table_create(){
 
   ioopm_hash_table_t *result = calloc(1,sizeof(ioopm_hash_table_t));
 
-  for (int i = 0 ; i < 17 ; i++){
+  for (int i = 0 ; i < No_Buckets ; i++){
     result->buckets[i] = entry_create(0,NULL,NULL);
   }
   
@@ -95,7 +82,7 @@ ioopm_hash_table_t *ioopm_hash_table_create(){
 }
 
 static entry_t *find_previous_entry_for_key(ioopm_hash_table_t *ht, int key){  
-  int bucket = key % 17;
+  int bucket = key % No_Buckets;
   entry_t *return_entry = ht->buckets[bucket];
   entry_t *current_entry = ht->buckets[bucket];
 
@@ -113,7 +100,7 @@ static entry_t *find_previous_entry_for_key(ioopm_hash_table_t *ht, int key){
 
 void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value){
   /// Calculate the bucket for this entry
-  //int bucket = key % 17;
+  //int bucket = key % No_Buckets;
   /// Search for an existing entry for a key
   entry_t *entry = find_previous_entry_for_key(ht, key);
   entry_t *next = entry->next;
@@ -171,12 +158,10 @@ void entry_destroy(entry_t *entry){
 
 void ioopm_hash_table_destroy(ioopm_hash_table_t *ht){
   
-  for (int i = 0 ; i < 17 ; i ++){
-    printf("BUCKET: %d\n",i);
+  for (int i = 0 ; i < No_Buckets ; i++){
     entry_t *current_entry = ht->buckets[i];
     
     while(current_entry->next != NULL){
-      puts("Entry Destroyed");
       entry_destroy(current_entry);
       current_entry = current_entry->next;
     }
@@ -185,4 +170,20 @@ void ioopm_hash_table_destroy(ioopm_hash_table_t *ht){
   }
 
   free(ht);
+  puts("Hashtable successfully destroyed!");
+}
+
+int ioopm_hash_table_size(ioopm_hash_table_t *ht){
+  int result = 0; 
+  for (int i = 0 ; i < No_Buckets ; i++){
+    entry_t *current_entry = ht->buckets[i];
+    result--;
+    while(current_entry->next != NULL){
+      current_entry = current_entry->next;
+      result++;
+    }
+    result++;
+    current_entry = ht->buckets[i];
+  }
+  return result;
 }

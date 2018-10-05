@@ -1,4 +1,3 @@
-
 #ifndef __HASH_TABLE_H__
 #define __HASH_TABLE_H__
 
@@ -22,7 +21,9 @@ char **ioopm_hash_table_lookup(ioopm_hash_table_t*,int);
 ioopm_hash_table_t *ioopm_hash_table_remove(ioopm_hash_table_t*, int);
 void entry_destroy(entry_t*);
 void ioopm_hash_table_destroy(ioopm_hash_table_t*);
- 
+int ioopm_hash_table_size(ioopm_hash_table_t*);
+
+
 struct option{
   bool defined;
   char *value;
