@@ -2,7 +2,7 @@
 /* WARNING!
    Only error when using more than 17 buckets when using hash_table_destroy function. --TODO fix! 
 */
-#define No_Buckets 17
+#define No_Buckets 5
 
 int main(int argc, char *argv[]){
   ioopm_hash_table_t *hash_table = ioopm_hash_table_create();
@@ -11,14 +11,15 @@ int main(int argc, char *argv[]){
   //hash_table->buckets[3] = entry_create(7,"one",(entry_create(8,"two",(entry_create(9,"three",NULL)))));
 
   
-  printf("Hashtable empty?: %d\n",ioopm_hash_table_is_empty(hash_table));
   ioopm_hash_table_insert(hash_table,0,"FIRSTINSERT");
   ioopm_hash_table_insert(hash_table,112,"SECONDINSERT");
   ioopm_hash_table_insert(hash_table,3125,"TURDINSERT");
 
-    printf("Hashtable empty?: %d\n",ioopm_hash_table_is_empty(hash_table));
-
-  //  ioopm_print_hash_table(hash_table);
+  puts("Before clear:");
+  ioopm_print_hash_table(hash_table);
+  ioopm_hash_table_clear(hash_table);
+  puts("After clear:");
+  ioopm_print_hash_table(hash_table);
   
 
 
@@ -58,7 +59,9 @@ void ioopm_print_entry_t(entry_t *entry){
 }
 
 
+
 void ioopm_print_hash_table(ioopm_hash_table_t *ht){
+  
   for (int i = 0 ; i < No_Buckets ; i++){
     entry_t *current_entry = ht->buckets[i];
     printf("Bucket: %d\n",i);
@@ -196,4 +199,23 @@ bool ioopm_hash_table_is_empty(ioopm_hash_table_t *ht){
     }
   }
   return true;
+}
+
+void ioopm_hash_table_clear(ioopm_hash_table_t *ht){
+  
+  for (int i = 0 ; i < No_Buckets ; i++){
+    entry_t *current_entry = ht->buckets[i];
+    entry_t *first_entry = ht->buckets[i-1];
+    while(current_entry->next != NULL){
+      
+      entry_destroy(current_entry);
+      current_entry = current_entry->next;
+    }
+    if( i > 1){
+      first_entry = entry_create(0,NULL,NULL);
+    }
+    current_entry = ht->buckets[i];
+    
+  }
+
 }

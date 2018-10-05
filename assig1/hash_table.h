@@ -23,6 +23,8 @@ void entry_destroy(entry_t*);
 void ioopm_hash_table_destroy(ioopm_hash_table_t*);
 int ioopm_hash_table_size(ioopm_hash_table_t*);
 bool ioopm_hash_table_is_empty(ioopm_hash_table_t*);
+void ioopm_hash_table_clear(ioopm_hash_table_t *ht);
+
 
 struct option{
   bool defined;
