@@ -2,46 +2,38 @@
 /* WARNING!
    Only error when using more than 17 buckets when using hash_table_destroy function. --TODO fix! 
 */
-#define No_Buckets 5
+#define No_Buckets 17
+
+
 
 int main(int argc, char *argv[]){
   ioopm_hash_table_t *hash_table = ioopm_hash_table_create();
-  //  hash_table->buckets[0] = entry_create(1,"one",(entry_create(2,"two",(entry_create(3,"three",NULL)))));
-  //hash_table->buckets[1] = entry_create(4,"one",(entry_create(5,"two",(entry_create(6,"three",NULL)))));
-  //hash_table->buckets[3] = entry_create(7,"one",(entry_create(8,"two",(entry_create(9,"three",NULL)))));
 
+  char *string_arr = calloc(1,sizeof("hello"));
   
-  ioopm_hash_table_insert(hash_table,0,"FIRSTINSERT");
-  ioopm_hash_table_insert(hash_table,112,"SECONDINSERT");
-  ioopm_hash_table_insert(hash_table,3125,"TURDINSERT");
+  string_arr = "hello";
+  ioopm_hash_table_insert(hash_table, 9999, string_arr);
+  ioopm_hash_table_insert(hash_table, 7777, "Second");
+  ioopm_hash_table_insert(hash_table, 8888, "First");
+  ioopm_hash_table_insert(hash_table, 6666, "Fourth");
+  ioopm_hash_table_insert(hash_table, 12, "Third");
+  ioopm_hash_table_insert(hash_table, 34, "Second");
 
-  puts("Before clear:");
-  ioopm_print_hash_table(hash_table);
-  ioopm_hash_table_clear(hash_table);
-  puts("After clear:");
-  ioopm_print_hash_table(hash_table);
-  
-
-
-  
-  //char **value_return = ioopm_hash_table_lookup(hash_table,127);
-  
-  //  printf("RESULT WAS: %s\n", *value_return);
-
-  //puts("OG Hash:");
-  
   //ioopm_print_hash_table(hash_table);
+  //ioopm_hash_table_clear(hash_table);
+  // printf("Hashtable size: %d\n",ioopm_hash_table_size(hash_table));
+  ioopm_hash_table_destroy(hash_table);
 
-  
-  //puts("New Hash:");
-
-  //ioopm_hash_table_destroy(hash_table); 
-  //ioopm_print_hash_table(hash_table);
-
-  //    ioopm_print_entry_t(find_previous_entry_for_key(hash_table,129));
+  printf(":%s\n",string_arr);
   return 0;
 }
 
+
+
+/* Entry_Create
+Param: Integer key, String value, An entry_t next (NULL unless adding several entries)
+Returns: Pointer to an entry_t
+*/
 static entry_t *entry_create(int key, char *value, entry_t *next){
 
   entry_t *result = calloc(1,sizeof(entry_t));
@@ -51,7 +43,11 @@ static entry_t *entry_create(int key, char *value, entry_t *next){
 
   return result;
 }
-
+/* Print Entry 
+Prints a single entry_t
+Param: Pointer to an entry_t
+Returns: VOID
+*/
 void ioopm_print_entry_t(entry_t *entry){
   int key = entry->key;
   char *value = entry->value;
@@ -59,7 +55,11 @@ void ioopm_print_entry_t(entry_t *entry){
 }
 
 
-
+/* Print_hash_table
+Prints all nodes in a hash table. 
+Param: Pointer to an IOOPM_hash_table_t
+Returns: VOID
+*/
 void ioopm_print_hash_table(ioopm_hash_table_t *ht){
   
   for (int i = 0 ; i < No_Buckets ; i++){
@@ -73,7 +73,11 @@ void ioopm_print_hash_table(ioopm_hash_table_t *ht){
   }
 }
 
-
+/* Hash_table_create
+Creates an ioopm hash table and initializes with dummy nodes for all buckets. 
+Param: No parameters needed
+Returns: Pointer to a hash_table_t
+*/
 ioopm_hash_table_t *ioopm_hash_table_create(){
 
   ioopm_hash_table_t *result = calloc(1,sizeof(ioopm_hash_table_t));
@@ -85,6 +89,11 @@ ioopm_hash_table_t *ioopm_hash_table_create(){
   return result;
 }
 
+/* Find_previous_entry_for_key
+Given a key, find_previous, returns the entry_t before the given key. 
+Param: Pointer to hash_table_t, int key
+Returns: Pointer to an entry_t
+*/
 static entry_t *find_previous_entry_for_key(ioopm_hash_table_t *ht, int key){  
   int bucket = key % No_Buckets;
   entry_t *return_entry = ht->buckets[bucket];
@@ -101,7 +110,11 @@ static entry_t *find_previous_entry_for_key(ioopm_hash_table_t *ht, int key){
 }
 
 
-
+/* Hash_table_insert
+Given a hash_table_t, key and value, the function inserts an entry with the given key value pair in the ht. 
+Param: Pointer to a hash_table_t, integer key, string value. 
+Returns: VOID
+*/
 void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value){
   /// Calculate the bucket for this entry
   //int bucket = key % No_Buckets;
@@ -207,7 +220,6 @@ void ioopm_hash_table_clear(ioopm_hash_table_t *ht){
     entry_t *current_entry = ht->buckets[i];
     entry_t *first_entry = ht->buckets[i-1];
     while(current_entry->next != NULL){
-      
       entry_destroy(current_entry);
       current_entry = current_entry->next;
     }
@@ -215,7 +227,41 @@ void ioopm_hash_table_clear(ioopm_hash_table_t *ht){
       first_entry = entry_create(0,NULL,NULL);
     }
     current_entry = ht->buckets[i];
+    if (first_entry->value != NULL){
+    }
+  }
+ 
+}
+
+
+
+
+int *ioopm_hash_table_keys(ioopm_hash_table_t *ht){
+  
+  int ht_size = ioopm_hash_table_size(ht);
+  int keysarr[ht_size];
+  int *keys = calloc(1,sizeof(keysarr));;
+  int key = 0;
+  for (int i = 0 ; i < No_Buckets ; i++){
+    entry_t *current_entry = ht->buckets[i];
+    int value_numb = 0;
     
+    while(current_entry->next != NULL){
+      if (value_numb != 0){
+	keys[key] = current_entry->key;
+	key++;
+      }
+      value_numb++;
+      current_entry = current_entry->next;
+    }
+    
+    if(value_numb != 0){
+      keys[key] = current_entry->key;
+      key++;
+      
+    }
   }
 
+  return keys;
 }
+
