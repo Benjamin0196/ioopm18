@@ -22,15 +22,8 @@ int main(int argc, char *argv[]){
   //ioopm_print_hash_table(hash_table);
   //ioopm_hash_table_clear(hash_table);
   // printf("Hashtable size: %d\n",ioopm_hash_table_size(hash_table));
-  
-  char **values_array = ioopm_hash_table_values(hash_table);
 
-  printf("VALUE: %s\n",values_array[1]);
-
-  
-  for (int i = 0 ; i < ioopm_hash_table_size(hash_table) ; i++){
-    printf("VALUE: %s\n",values_array[i]);
-  }
+ 
   return 0;
   
 }
@@ -299,4 +292,29 @@ char **ioopm_hash_table_values(ioopm_hash_table_t *ht){
   values_array[insert_value] = NULL;
   
   return values_array;
+}
+
+
+bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, int key){
+  
+  if (*ioopm_hash_table_lookup(ht,key) == NULL){
+    return false;
+  }
+  else{
+    return true;
+  };
+  
+}
+
+bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, char *value){
+  char **all_values = ioopm_hash_table_values(ht);
+  int value_size = ioopm_hash_table_size(ht);
+
+  for (int i = 0 ; i < value_size ; i++){
+    if (strcmp(value,all_values[i]) == 0){
+      return true;
+    }
+  }
+  return false;
+  
 }

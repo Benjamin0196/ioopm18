@@ -26,6 +26,9 @@ bool ioopm_hash_table_is_empty(ioopm_hash_table_t*);
 void ioopm_hash_table_clear(ioopm_hash_table_t*);
 int *ioopm_hash_table_keys(ioopm_hash_table_t*);
 char **ioopm_hash_table_values(ioopm_hash_table_t*);
+bool ioopm_hash_table_has_key(ioopm_hash_table_t*, int);
+bool ioopm_hash_table_has_value(ioopm_hash_table_t*, char*);
+
 struct option{
   bool defined;
   char *value;
