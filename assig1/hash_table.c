@@ -16,16 +16,23 @@ int main(int argc, char *argv[]){
   ioopm_hash_table_insert(hash_table, 7777, "Second");
   ioopm_hash_table_insert(hash_table, 8888, "First");
   ioopm_hash_table_insert(hash_table, 6666, "Fourth");
-  ioopm_hash_table_insert(hash_table, 12, "Third");
+  ioopm_hash_table_insert(hash_table, 17, "Third");
   ioopm_hash_table_insert(hash_table, 34, "Second");
 
   //ioopm_print_hash_table(hash_table);
   //ioopm_hash_table_clear(hash_table);
   // printf("Hashtable size: %d\n",ioopm_hash_table_size(hash_table));
-  ioopm_hash_table_destroy(hash_table);
+  
+  char **values_array = ioopm_hash_table_values(hash_table);
 
-  printf(":%s\n",string_arr);
+  printf("VALUE: %s\n",values_array[1]);
+
+  
+  for (int i = 0 ; i < ioopm_hash_table_size(hash_table) ; i++){
+    printf("VALUE: %s\n",values_array[i]);
+  }
   return 0;
+  
 }
 
 
@@ -265,3 +272,31 @@ int *ioopm_hash_table_keys(ioopm_hash_table_t *ht){
   return keys;
 }
 
+char **ioopm_hash_table_values(ioopm_hash_table_t *ht){
+  int ht_size = ioopm_hash_table_size(ht);
+  char *values_array_temp[ht_size];
+  char **values_array = calloc(1,sizeof(values_array_temp));
+  bool dummy_skip = true; 
+  int insert_value = 0; 
+  
+  for (int i = 0 ; i < No_Buckets ; i++){
+    dummy_skip = true; 
+    entry_t *current_entry = ht->buckets[i];
+    while (current_entry -> next != NULL) {
+      if (dummy_skip == false){
+	values_array[insert_value] = current_entry->value;
+	insert_value++;
+      }
+      current_entry = current_entry->next;
+      dummy_skip = false;
+    }
+    if (dummy_skip == false) {
+      values_array[insert_value] = current_entry->value;
+      insert_value++;
+    }
+  }
+
+  values_array[insert_value] = NULL;
+  
+  return values_array;
+}
