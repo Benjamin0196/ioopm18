@@ -29,6 +29,12 @@ char **ioopm_hash_table_values(ioopm_hash_table_t*);
 bool ioopm_hash_table_has_key(ioopm_hash_table_t*, int);
 bool ioopm_hash_table_has_value(ioopm_hash_table_t*, char*);
 
+/*
+typedef bool(*ioopm_apply_function)(entry_t*,int);
+bool ioopm_hash_table_any(ioopm_hash_table_t*, ioopm_apply_function, void*);
+bool key_comp(entry_t*,int);
+*/
+
 struct option{
   bool defined;
   char *value;

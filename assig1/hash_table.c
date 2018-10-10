@@ -23,7 +23,10 @@ int main(int argc, char *argv[]){
   //ioopm_hash_table_clear(hash_table);
   // printf("Hashtable size: %d\n",ioopm_hash_table_size(hash_table));
 
- 
+  void *a_void;
+  
+  bool result_keys = ioopm_hash_table_any(hash_table,key_comp,&a_void);
+  printf("RESULT: %d\n",result_keys);
   return 0;
   
 }
@@ -318,3 +321,30 @@ bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, char *value){
   return false;
   
 }
+
+/*
+
+// Hash_table_any is supposed to take a pointer to a hashtable, a function, and a void argument.
+// The function shall be applied to every element of the ht, and return true if one element satisfies the predicate. 
+bool ioopm_hash_table_any(ioopm_hash_table_t *ht, ioopm_apply_function pred, void *arg){
+  int ht_size = ioopm_hash_table_size(ht);
+  int key = 20; 
+  for (int i = 0 ; i < ht_size ; i++){ //For every bucket
+    entry_t *current_entry = ht->buckets[i];
+    while (current_entry->next != NULL){
+      if (pred(current_entry,key)){
+	return true;
+      }
+      current_entry = current_entry->next;
+    }
+  }
+  return false;
+}
+
+bool key_comp(entry_t *entry,int key){
+  int current_key = entry->key;
+  return (current_key == key);
+}
+*/
+
+/// ---------------------------------------------------------------------------------------------------------------- ///
