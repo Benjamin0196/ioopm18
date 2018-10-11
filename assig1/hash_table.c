@@ -24,14 +24,12 @@ int main(int argc, char *argv[]){
   //ioopm_hash_table_clear(hash_table);
   // printf("Hashtable size: %d\n",ioopm_hash_table_size(hash_table));
 
+  void *void_ptr;
 
-  
-  int void_int = 0;
-  bool result = ioopm_hash_table_all(hash_table,key_comp,&void_int);
-  
-    printf("ANY?: %d\n",result);
-  
-  
+  puts("----------------KEYS----------------");
+  ioopm_hash_table_apply_to_all(hash_table,apply_print_keys_function,void_ptr);
+  puts("----------------VALUES----------------");
+  ioopm_hash_table_apply_to_all(hash_table,apply_print_values_function,void_ptr);
 }
 
 
@@ -302,14 +300,7 @@ char **ioopm_hash_table_values(ioopm_hash_table_t *ht){
 
 
 bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, int key){
-  
-  if (*ioopm_hash_table_lookup(ht,key) == NULL){
-    return false;
-  }
-  else{
-    return true;
-  };
-  
+  return ioopm_hash_table_any(ht, key_comp, &key);  
 }
 
 bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, char *value){
@@ -331,7 +322,7 @@ Takes a pointer to a hashtable and applies a function to all values until the fu
 PARAM: ptr to hashtable, ptr to function that returns a bool, void pointer. 
 RETURNS: True if any of the entries in the hashtable satisfy the function predicate. 
  */
-bool ioopm_hash_table_any(ioopm_hash_table_t *ht, ioopm_apply_function pred, void *arg){
+bool ioopm_hash_table_any(ioopm_hash_table_t *ht, ioopm_predicate pred, void *arg){
   for (int i = 0 ; i < No_Buckets ; i++){ //For every bucket
     entry_t *current_entry = ht->buckets[i]->next;
     while (current_entry != NULL){
@@ -345,7 +336,7 @@ bool ioopm_hash_table_any(ioopm_hash_table_t *ht, ioopm_apply_function pred, voi
 }
 
 
-bool ioopm_hash_table_all(ioopm_hash_table_t *ht, ioopm_apply_function pred, void *arg){
+bool ioopm_hash_table_all(ioopm_hash_table_t *ht, ioopm_predicate pred, void *arg){
   for (int i = 0 ; i < No_Buckets ; i++){ //For every bucket
     entry_t *current_entry = ht->buckets[i]->next;
     while (current_entry != NULL){
@@ -358,15 +349,29 @@ bool ioopm_hash_table_all(ioopm_hash_table_t *ht, ioopm_apply_function pred, voi
   return true;
 }
 
+void ioopm_hash_table_apply_to_all(ioopm_hash_table_t *ht, ioopm_apply_function function, void *arg){
+  for (int i = 0 ; i < No_Buckets ; i++){ //For every bucket
+    entry_t *current_entry = ht->buckets[i]->next;
+    while (current_entry != NULL){
+      function(current_entry->key, &current_entry->value, arg);
+      current_entry = current_entry->next;
+    }
+  }
+}
+
+void apply_print_keys_function(int key, char **value, void *arg){
+  printf("Key: %d\n", key);
+}
+
+void apply_print_values_function(int key, char **value, void *arg){
+  printf("Key: %s\n", *value);
+}
 
 
 /* key_comp
 Compares the key of an entry with the key given as parameter. 
 PARAM: entry_t and an integer key
 RETURNS: Boolean, true if the key of the entry_t is the same as the given key, otherwise false. 
-bool key_comp(entry_t *entry,int key){
-  int current_key = entry->key;
-  return (current_key == key);
 }
  */
 
