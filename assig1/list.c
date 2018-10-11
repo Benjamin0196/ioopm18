@@ -199,12 +199,32 @@ void clear(void){
 /*
 TODO
 
-[]
-[]
-[]
-[]
-[]
-[]
-[]
+ioopm_list_t *ioopm_linked_list_create()                                                  [x]
+
+void ioopm_linked_list_destroy(ioopm_list_t *list);                                       []
+
+void ioopm_linked_list_append(ioopm_list_t *list, int value);                             [x]
+
+void ioopm_linked_list_prepend(ioopm_list_t *list, int value);                            [x]
+
+void ioopm_linked_list_insert(ioopm_list_t *list, int index, int value);                  [x]
+
+int ioopm_linked_list_remove(ioopm_list_t *list, int index);                              [x]
+
+int ioopm_linked_list_get(ioopm_list_t *list, int index);                                 [x]
+
+bool ioopm_linked_list_contains(ioopm_list_t *list, int element);                         []
+
+int ioopm_linked_list_size(ioopm_list_t *list);                                           [x]
+
+bool ioopm_linked_list_is_empty(ioopm_list_t *list);                                      [x]
+
+void ioopm_linked_list_clear(ioopm_list_t *list);                                         []
+
+bool ioopm_linked_list_all(ioopm_list_t *list, bool (*prop)(int, void *), void *x);       []
+
+bool ioopm_linked_list_any(ioopm_list_t *list, bool (*prop)(int, void *), void *x);       []
+
+void ioopm_linked_apply_to_all(ioopm_list_t *list, void (*fun)(int *, void *), void *x);  []
  */
 
