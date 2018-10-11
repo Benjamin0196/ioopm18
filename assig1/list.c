@@ -10,7 +10,6 @@ typedef struct link link_t;
 struct link
 {
   int value;
-  char *shelf;
   link_t *next;
 };
 
@@ -33,25 +32,9 @@ link_t *link_new()
   link_t *createdlink = malloc(sizeof(link_t));
   createdlink->value = NULL;
   createdlink->next = NULL;
-  createdlink->shelf = NULL;
 
   return createdlink;
   
-}
-
-char *list_getshelfname(list_ *list, int index)
-{
-  int i = 0;
-  char *str = " ";
-  struct lik *travlist;
-  
-  travlist = list->first;
-  for(;(i < index && travlist->next != 0); i++)
-    {
-      travlist = travlist->next;
-    }
-  str = travlist->shelf;
-  return str;
 }
 
 
@@ -196,12 +179,12 @@ int list_sum(list_t *list)
           sum = sum + travlist->value;
           travlist = travlist->next;
         }
-      return sum
+      return sum;
     }
   return 0;
 }
 
-int *list_first(list_1 *list)
+int *list_first(list_t *list)
 {
   return(list_get(list, 0));
 }
@@ -213,84 +196,15 @@ void clear(void){
   }
   while(u != '\n');
 }
+/*
+TODO
 
-int main()
-{
-  list_t *list = list_new();
-
-  int ind;
-  int val;
-  char c;
-
-  while(true){
-    int len = list_length(list);
-    printf("Längden av listan; %d\n", len);
-    puts(" [a]dd index value\n app[e]nd value\n [p]repend value\n [g]et index value\n [f]irst element in list\n [l]ast element");
-
-    scanf("%c", &c);
-    switch(c){
-
-    case 'a':
-      clear();
-
-      scanf("%d %d", &ind, &val);
-      printf("index: %d\nvalue: %\n",ind,val);
-
-      list_insert(list, ind, val);
-      clear();
-      break;
-
-    case 'g':
-      clear();
-      puts("vilket index vill du visa value i:");
-      scanf("&d", &ind);
-
-      if (len < ind || len == 0) printf("det finns inget elemt vid index %d\n", ind);
-    }
-    clear();
-    break;
-
-  case 'f':
-    clear();
-    if (len == 0) puts("listan e tom, det finns inget first element");
-    else{
-      int *first = list_first(list);
-      printf("första elementet i listan ar: %d\n", *first);
-    }
-    break;
-
-  case 'l':
-    clear();
-    if(len == 0) puts("listan e tom, det finns inget last element");
-    else{
-      int *last = list_last(list);
-      printf("sista elementet i listan e: %d\n", *last);
-    }
-    break;
-
-  case 'e':
-    clear();
-    puts("vilket value vill du appenda:");
-    scanf("%d", &ind);
-
-    list_append(list, ind);
-    int *last = list_last(list);
-    printf("sista elementet i listan är nu: %d\n", *last)
-
-      clear();
-    break;
-
-  case 'p':
-    clear();
-    puts("vilket value vill du appenda:");
-    scanf("%d", & ind);
-
-    list_prepend(list, ind);
-    int *first = list_first(list);
-    printf("första elementet i listan är nu: %d\n", *first);
-    clear();
-    break;
-  }
-  return 0;
-}
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+ */
 
