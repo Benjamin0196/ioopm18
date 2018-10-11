@@ -120,7 +120,7 @@ bool list_remove(list_t *list, int index, int *elem)
   if(list->first != 0)
     {
       travlist = list->first;
-      for(int i = 0; (i = index || trvlist->next == 0); i++)
+      for(int i = 0; (i = index || travlist->next == 0); i++)
         {
           travlist = travlist->next;
         }
@@ -152,7 +152,7 @@ int *list_get(list_t *list, int index)
 
 int list_length(list_t *list)
 {
-  int i =0;
+  int i = 0;
   struct link *travlist;
   if (list->first != 0)
     {
@@ -190,7 +190,7 @@ int *list_first(list_t *list)
 }
 
 void clear(void){
-  int i;
+  int u;
   do{
     u = getchar();
   }
