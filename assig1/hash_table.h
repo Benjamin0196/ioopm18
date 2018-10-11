@@ -30,9 +30,11 @@ bool ioopm_hash_table_has_key(ioopm_hash_table_t*, int);
 bool ioopm_hash_table_has_value(ioopm_hash_table_t*, char*);
 
 
-typedef bool(*ioopm_apply_function)(entry_t*,int);
+
+typedef bool(*ioopm_apply_function)(int,char*,void*);
 bool ioopm_hash_table_any(ioopm_hash_table_t*, ioopm_apply_function, void*);
-bool key_comp(entry_t*,int);
+bool key_comp(int,char*,void*);
+bool ioopm_hash_table_all(ioopm_hash_table_t*, ioopm_apply_function,void*);
 
 struct option{
   bool defined;

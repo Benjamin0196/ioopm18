@@ -26,8 +26,8 @@ int main(int argc, char *argv[]){
 
 
   
-  int void_int = 16;
-  bool result = ioopm_hash_table_any(hash_table,key_comp,&void_int);
+  int void_int = 0;
+  bool result = ioopm_hash_table_all(hash_table,key_comp,&void_int);
   
     printf("ANY?: %d\n",result);
   
@@ -332,37 +332,46 @@ PARAM: ptr to hashtable, ptr to function that returns a bool, void pointer.
 RETURNS: True if any of the entries in the hashtable satisfy the function predicate. 
  */
 bool ioopm_hash_table_any(ioopm_hash_table_t *ht, ioopm_apply_function pred, void *arg){
- 
-  int *key_ptr = arg;
-  int key = *key_ptr;
-  
-
   for (int i = 0 ; i < No_Buckets ; i++){ //For every bucket
-    entry_t *current_entry = ht->buckets[i];
-    while (current_entry->next != NULL){
-	puts("Search...");
-	if (pred(current_entry,key)){
+    entry_t *current_entry = ht->buckets[i]->next;
+    while (current_entry != NULL){
+	if (pred(current_entry->key, current_entry->value, arg)){
 	  return true;
 	}     
 	current_entry = current_entry->next;
     }
-    puts("Search... end");
-    
-    if (pred(current_entry,key)){
-      return true;
-    }
-    
   }
   return false;
 }
+
+
+bool ioopm_hash_table_all(ioopm_hash_table_t *ht, ioopm_apply_function pred, void *arg){
+  for (int i = 0 ; i < No_Buckets ; i++){ //For every bucket
+    entry_t *current_entry = ht->buckets[i]->next;
+    while (current_entry != NULL){
+      if (pred(current_entry->key, current_entry->value, arg) == false){
+	return false;
+	}     
+	current_entry = current_entry->next;
+    }
+  }
+  return true;
+}
+
+
+
 /* key_comp
 Compares the key of an entry with the key given as parameter. 
 PARAM: entry_t and an integer key
 RETURNS: Boolean, true if the key of the entry_t is the same as the given key, otherwise false. 
- */
 bool key_comp(entry_t *entry,int key){
   int current_key = entry->key;
   return (current_key == key);
+}
+ */
+
+bool key_comp(int key, char *value, void *other_key){
+  return key == *(int *)other_key;
 }
 
 /// ----------------------------------------------------------------------------------------------------------- ///
