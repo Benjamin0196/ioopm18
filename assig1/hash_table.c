@@ -18,16 +18,19 @@ int main(int argc, char *argv[]){
   ioopm_hash_table_insert(hash_table, 6666, "Fourth");
   ioopm_hash_table_insert(hash_table, 17, "Third");
   ioopm_hash_table_insert(hash_table, 34, "Second");
+  ioopm_hash_table_insert(hash_table, 16, "Second");
 
   //ioopm_print_hash_table(hash_table);
   //ioopm_hash_table_clear(hash_table);
   // printf("Hashtable size: %d\n",ioopm_hash_table_size(hash_table));
 
-  void *a_void;
+
   
-  bool result_keys = ioopm_hash_table_any(hash_table,key_comp,&a_void);
-  printf("RESULT: %d\n",result_keys);
-  return 0;
+  int void_int = 16;
+  bool result = ioopm_hash_table_any(hash_table,key_comp,&void_int);
+  
+    printf("ANY?: %d\n",result);
+  
   
 }
 
@@ -322,29 +325,44 @@ bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, char *value){
   
 }
 
-/*
 
-// Hash_table_any is supposed to take a pointer to a hashtable, a function, and a void argument.
-// The function shall be applied to every element of the ht, and return true if one element satisfies the predicate. 
+/* ioopm_hash_table_any
+Takes a pointer to a hashtable and applies a function to all values until the function predicate is satisfied. 
+PARAM: ptr to hashtable, ptr to function that returns a bool, void pointer. 
+RETURNS: True if any of the entries in the hashtable satisfy the function predicate. 
+ */
 bool ioopm_hash_table_any(ioopm_hash_table_t *ht, ioopm_apply_function pred, void *arg){
-  int ht_size = ioopm_hash_table_size(ht);
-  int key = 20; 
-  for (int i = 0 ; i < ht_size ; i++){ //For every bucket
+ 
+  int *key_ptr = arg;
+  int key = *key_ptr;
+  
+
+  for (int i = 0 ; i < No_Buckets ; i++){ //For every bucket
     entry_t *current_entry = ht->buckets[i];
     while (current_entry->next != NULL){
-      if (pred(current_entry,key)){
-	return true;
-      }
-      current_entry = current_entry->next;
+	puts("Search...");
+	if (pred(current_entry,key)){
+	  return true;
+	}     
+	current_entry = current_entry->next;
     }
+    puts("Search... end");
+    
+    if (pred(current_entry,key)){
+      return true;
+    }
+    
   }
   return false;
 }
-
+/* key_comp
+Compares the key of an entry with the key given as parameter. 
+PARAM: entry_t and an integer key
+RETURNS: Boolean, true if the key of the entry_t is the same as the given key, otherwise false. 
+ */
 bool key_comp(entry_t *entry,int key){
   int current_key = entry->key;
   return (current_key == key);
 }
-*/
 
-/// ---------------------------------------------------------------------------------------------------------------- ///
+/// ----------------------------------------------------------------------------------------------------------- ///
